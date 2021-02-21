@@ -3,7 +3,7 @@ package com.szareckii.dictionary.view.main
 import com.szareckii.dictionary.model.data.AppState
 import com.szareckii.dictionary.model.data.DataModel
 import com.szareckii.dictionary.model.repository.Repository
-import com.szareckii.dictionary.presenter.Interactor
+import com.szareckii.dictionary.viewmodel.Interactor
 import io.reactivex.Observable
 
 class MainInteractor(

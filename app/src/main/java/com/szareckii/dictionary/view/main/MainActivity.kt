@@ -4,18 +4,23 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.szareckii.dictionary.R
 import com.szareckii.dictionary.model.data.AppState
 import com.szareckii.dictionary.model.data.DataModel
-import com.szareckii.dictionary.presenter.Presenter
 import com.szareckii.dictionary.view.base.BaseActivity
-import com.szareckii.dictionary.view.base.View
 import com.szareckii.dictionary.view.main.adapter.MainAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
-
 class MainActivity : BaseActivity<AppState>() {
+
+    override val model: MainViewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
+    }
+
+    private val observer = Observer<AppState> { renderData(it)}
 
     private var adapter: MainAdapter? = null
 
@@ -26,10 +31,6 @@ class MainActivity : BaseActivity<AppState>() {
             }
         }
 
-    override fun createPresenter(): Presenter<AppState, View> {
-        return MainPresenterImpl()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,7 +38,7 @@ class MainActivity : BaseActivity<AppState>() {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(object : SearchDialogFragment.OnSearchClickListener {
                 override fun onClick(searchWord: String) {
-                    presenter.getData(searchWord, true)
+                    model.getData(searchWord, true).observe(this@MainActivity, observer)
                 }
             })
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
@@ -82,7 +83,7 @@ class MainActivity : BaseActivity<AppState>() {
         showViewError()
         error_textview.text = error ?: getString(R.string.undefined_error)
         reload_button.setOnClickListener {
-            presenter.getData("default", true)
+            model.getData("default", true).observe(this, observer)
         }
     }
 
