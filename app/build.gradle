@@ -63,6 +63,16 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
 
+    //Dagger
+    implementation 'com.google.dagger:dagger-android:2.17'
+    implementation 'com.google.dagger:dagger-android-support:2.17'
+    kapt 'com.google.dagger:dagger-android-processor:2.17'
+    kapt 'com.google.dagger:dagger-compiler:2.17'
+//
+//    implementation 'com.google.dagger:dagger:2.17'
+//    kapt 'com.google.dagger:dagger-compiler:2.17'
+
+
     // Test
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
