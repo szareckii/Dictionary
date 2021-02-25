@@ -6,7 +6,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.szareckii.dictionary.R
 import com.szareckii.dictionary.model.data.AppState
@@ -14,16 +13,12 @@ import com.szareckii.dictionary.model.data.DataModel
 import com.szareckii.dictionary.utils.ui.network.isOnline
 import com.szareckii.dictionary.view.base.BaseActivity
 import com.szareckii.dictionary.view.main.adapter.MainAdapter
-import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<AppState>() {
 
-    // Внедряем фабрику для создания ViewModel
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
-    override lateinit var model: MainViewModel
+    override val model: MainViewModel by viewModel()
 
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
 
@@ -54,19 +49,21 @@ class MainActivity : BaseActivity<AppState>() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        // Сообщаем Dagger’у, что тут понадобятся зависимости
-        AndroidInjection.inject(this)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        iniViewModel()
+        initViews()
+    }
 
-        // Фабрика уже готова, можно создавать ViewModel
-        model = viewModelFactory.create(MainViewModel::class.java)
+    private fun iniViewModel() {
+        if (main_activity_recyclerview.adapter != null) {
+            throw IllegalStateException(getString(R.string.viewmodel_is_null))
+        }
         model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
+    }
 
+    private fun initViews() {
         search_fab.setOnClickListener(fabClickListener)
-
         main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
         main_activity_recyclerview.adapter = adapter
     }
