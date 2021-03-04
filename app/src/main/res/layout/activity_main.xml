@@ -24,25 +24,18 @@
             android:layout_marginBottom="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
             android:layout_height="wrap_content"/>
-    </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/loading_frame_layout"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:layout_gravity="center"
-            android:id="@+id/progress_bar_horizontal"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <ProgressBar
-            android:layout_gravity="center"
-            android:id="@+id/progress_bar_round"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/search_db_fab"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:src="@android:drawable/ic_input_get" />
+
     </FrameLayout>
+
+    <include layout="@layout/loading_layout"/>
+
 </FrameLayout>

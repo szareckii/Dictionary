@@ -14,4 +14,6 @@
     <string name="dialog_title_stub">Undefined error</string>
     <string name="dialog_tittle_sorry">Sorry</string>
     <string name="viewmodel_is_null">The ViewModel should be initialised first</string>
+    <string name="image_stub">image</string>
+    <string name="menu_title_history">History</string>
 </resources>

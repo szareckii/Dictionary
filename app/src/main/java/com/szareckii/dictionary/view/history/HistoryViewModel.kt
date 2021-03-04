@@ -1,14 +1,13 @@
-package com.szareckii.dictionary.view.main
+package com.szareckii.dictionary.view.history
 
 import androidx.lifecycle.LiveData
 import com.szareckii.dictionary.model.data.AppState
-import com.szareckii.dictionary.utils.parseSearchResults
+import com.szareckii.dictionary.utils.parseLocalSearchResults
 import com.szareckii.dictionary.viewmodel.BaseViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class MainViewModel(private val interactor: MainInteractor) :
+// Тоже мало отличий
+class HistoryViewModel(private val interactor: HistoryInteractor) :
     BaseViewModel<AppState>() {
 
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
@@ -23,8 +22,8 @@ class MainViewModel(private val interactor: MainInteractor) :
         viewModelCoroutineScope.launch { startInteractor(word, isOnline) }
     }
 
-    private suspend fun startInteractor(word: String, isOnline: Boolean) = withContext(Dispatchers.IO) {
-        _mutableLiveData.postValue(parseSearchResults(interactor.getData(word, isOnline)))
+    private suspend fun startInteractor(word: String, isOnline: Boolean) {
+        _mutableLiveData.postValue(parseLocalSearchResults(interactor.getData(word, isOnline)))
     }
 
     override fun handleError(error: Throwable) {
@@ -32,7 +31,9 @@ class MainViewModel(private val interactor: MainInteractor) :
     }
 
     override fun onCleared() {
-        _mutableLiveData.value = AppState.Success(null)
+        _mutableLiveData.value = AppState.Success(null) // Set View to
+        // original state in
+        // onStop
         super.onCleared()
     }
 }
