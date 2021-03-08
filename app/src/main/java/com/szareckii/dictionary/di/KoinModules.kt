@@ -2,19 +2,18 @@ package com.szareckii.dictionary.di
 
 import androidx.room.Room
 import com.szareckii.dictionary.model.data.DataModel
-import com.szareckii.dictionary.model.datasource.RetrofitImplementation
-import com.szareckii.dictionary.model.datasource.RoomDataBaseImplementation
-import com.szareckii.dictionary.model.repository.Repository
-import com.szareckii.dictionary.model.repository.RepositoryImplementation
-import com.szareckii.dictionary.model.repository.RepositoryImplementationLocal
-import com.szareckii.dictionary.model.repository.RepositoryLocal
-import com.szareckii.dictionary.room.HistoryDataBase
-import com.szareckii.dictionary.view.history.HistoryInteractor
-import com.szareckii.dictionary.view.history.HistoryViewModel
+import com.szareckii.repository.datasource.RetrofitImplementation
+import com.szareckii.repository.datasource.RoomDataBaseImplementation
+import com.szareckii.repository.repository.Repository
+import com.szareckii.repository.repository.RepositoryImplementation
+import com.szareckii.repository.repository.RepositoryImplementationLocal
+import com.szareckii.repository.repository.RepositoryLocal
+import com.szareckii.repository.room.HistoryDataBase
+import com.szareckii.historyscreen.view.history.HistoryInteractor
+import com.szareckii.historyscreen.view.history.HistoryViewModel
 import com.szareckii.dictionary.view.main.MainInteractor
 import com.szareckii.dictionary.view.main.MainViewModel
 import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val application = module {
@@ -37,6 +36,6 @@ val mainScreen = module {
 }
 
 val historyScreen = module {
-    factory { HistoryInteractor(get(), get()) }
-    viewModel { HistoryViewModel(get()) }
+    factory { com.szareckii.historyscreen.view.history.HistoryInteractor(get(), get()) }
+    viewModel { com.szareckii.historyscreen.view.history.HistoryViewModel(get()) }
 }
