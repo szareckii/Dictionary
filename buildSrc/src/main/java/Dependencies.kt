@@ -64,6 +64,9 @@ object Versions {
     // Swiperefreshlayout
     const val swiperefreshlayout = "1.1.0"
 
+    // GooglePlay
+    const val googlePlay = "1.6.3"
+
     // Test
     const val jUnit = "4.13.1"
     const val runner = "1.3.0"
@@ -117,6 +120,9 @@ object Room {
 
 object SwipeRefreshLayout {
     const val swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swiperefreshlayout}"
+}
+object GooglePlay {
+    const val googlePlay = "com.google.android.play:core:${Versions.googlePlay}"
 }
 
 object TestImpl {

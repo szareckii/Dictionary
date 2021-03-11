@@ -1,4 +1,4 @@
-package com.szareckii.historyscreen.view.history.adapter
+package com.szareckii.historyscreen.view.history.view
 
 import android.view.LayoutInflater
 import android.view.View

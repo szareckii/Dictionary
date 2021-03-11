@@ -2,12 +2,15 @@ package com.szareckii.historyscreen.view.history
 
 import android.os.Bundle
 import android.view.MenuItem
-import com.szareckii.dictionary.model.data.AppState
-import com.szareckii.dictionary.model.data.DataModel
-import com.szareckii.historyscreen.view.history.adapter.HistoryAdapter
 import androidx.lifecycle.Observer
 import com.szareckii.core.BaseActivity
+import com.szareckii.dictionary.model.data.AppState
+import com.szareckii.dictionary.model.data.DataModel
 import com.szareckii.historyscreen.R
+import com.szareckii.historyscreen.injectDependencies
+import com.szareckii.historyscreen.view.history.view.HistoryAdapter
+import com.szareckii.historyscreen.view.history.view.HistoryInteractor
+import com.szareckii.historyscreen.view.history.view.HistoryViewModel
 import kotlinx.android.synthetic.main.activity_history.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -57,9 +60,10 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
     }
 
     private fun iniViewModel() {
-        if (history_activity_recyclerview.adapter != null) {
-            throw IllegalStateException("The ViewModel should be initialised first")
-        }
+        check(history_activity_recyclerview.adapter == null) { getString(R.string.viewmodel_is_null) }
+
+        injectDependencies()
+
         model.subscribe().observe(this@HistoryActivity, Observer<AppState> { renderData(it, true) })
     }
 

@@ -10,7 +10,6 @@ class DictionaryApp : Application() {
         super.onCreate()
         startKoin {
             androidContext(applicationContext)
-            modules(listOf(application, mainScreen, historyScreen))
         }
     }
 }
