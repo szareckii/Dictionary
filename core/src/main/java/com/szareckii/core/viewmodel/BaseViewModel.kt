@@ -1,8 +1,8 @@
-package com.szareckii.dictionary.viewmodel
+package com.szareckii.core.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.szareckii.dictionary.model.data.AppState
+import com.szareckii.model.data.AppState
 import kotlinx.coroutines.*
 
 abstract class BaseViewModel<T : AppState>(

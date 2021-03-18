@@ -1,4 +1,4 @@
-package com.szareckii.utils.ui.network
+package com.szareckii.utils.network
 
 import android.content.Context
 import android.net.ConnectivityManager

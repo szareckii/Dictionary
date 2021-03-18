@@ -1,14 +1,14 @@
 package com.szareckii.repository
 
-import com.szareckii.dictionary.model.data.AppState
-import com.szareckii.dictionary.model.data.DataModel
+import com.szareckii.model.data.AppState
+import com.szareckii.model.data.dto.DataModelDto
 import com.szareckii.repository.room.HistoryEntity
 
-fun mapHistoryEntityToSearchResult(list: List<HistoryEntity>): List<DataModel> {
-    val searchResult = ArrayList<DataModel>()
+fun mapHistoryEntityToSearchResult(list: List<HistoryEntity>): List<DataModelDto> {
+    val searchResult = ArrayList<DataModelDto>()
     if (!list.isNullOrEmpty()) {
         for (entity in list) {
-            searchResult.add(DataModel(entity.word, null))
+            searchResult.add(DataModelDto(entity.word, null))
         }
     }
     return searchResult

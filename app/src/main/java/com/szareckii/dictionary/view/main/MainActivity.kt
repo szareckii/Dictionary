@@ -6,9 +6,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -24,24 +25,35 @@ import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.szareckii.core.BaseActivity
 import com.szareckii.dictionary.R
 import com.szareckii.dictionary.di.injectDependencies
-import com.szareckii.dictionary.model.data.AppState
-import com.szareckii.dictionary.model.data.DataModel
 import com.szareckii.dictionary.utils.convertMeaningsToString
 import com.szareckii.dictionary.view.description.DescriptionActivity
 import com.szareckii.dictionary.view.main.adapter.MainAdapter
-import com.szareckii.utils.ui.network.isOnline
-import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import com.szareckii.model.data.AppState
+import com.szareckii.model.data.userdata.DataModel
+import com.szareckii.utils.ui.viewById
+//import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.scope.currentScope
 
-class MainActivity : BaseActivity<AppState, MainInteractor>() {
+class   MainActivity : BaseActivity<AppState, MainInteractor>() {
 
-    override val model: MainViewModel by viewModel()
+    override val layoutRes = R.layout.activity_main
+    override lateinit var model: MainViewModel
 
     private lateinit var splitInstallManager: SplitInstallManager
 
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
 
     private lateinit var appUpdateManager: AppUpdateManager
+
+    private val mainActivityRecyclerView by viewById<RecyclerView>(R.id.main_activity_recyclerview)
+    private val searchFAB by viewById<FloatingActionButton>(R.id.search_fab)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        iniViewModel()
+        initViews()
+        checkForUpdates()
+    }
 
     // Слушатель получает от адаптера необходимые данные и запускает новый экран
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
@@ -66,17 +78,9 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
 
-    private val fabDBClickListener: View.OnClickListener =
-        View.OnClickListener {
-            val searchDialogFragment = SearchDialogFragment.newInstance()
-            searchDialogFragment.setOnSearchClickListener(onSearchDBClickListener)
-            searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
-        }
-
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
         object : SearchDialogFragment.OnSearchClickListener {
             override fun onClick(searchWord: String) {
-                isNetworkAvailable = isOnline(applicationContext)
                 if (isNetworkAvailable) {
                     model.getData(searchWord, isNetworkAvailable)
                 } else {
@@ -85,53 +89,22 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             }
         }
 
-    private val onSearchDBClickListener: SearchDialogFragment.OnSearchClickListener =
-        object : SearchDialogFragment.OnSearchClickListener {
-            override fun onClick(searchWord: String) {
-                model.getData(searchWord, false)
-
-//                  startActivity(
-//                    DescriptionActivity.getIntent(
-//                    this@MainActivity,
-//                        searchWord,
-//                        "null",
-//                        null
-//                    data.text!!,
-//                    convertMeaningsToString(data.meanings!!),
-//                    data.meanings[0].imageUrl
-
-//                    it. ..text!!,
-//                    convertMeaningsToString(data.meanings!!),
-//                    data.meanings[0].imageUrl
-//                  )
-//               )
-            }
-        }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        iniViewModel()
-        initViews()
-        checkForUpdates()
-    }
-
     private fun iniViewModel() {
-        check(main_activity_recyclerview.adapter == null) { getString(R.string.viewmodel_is_null) }
-
+        check(mainActivityRecyclerView.adapter == null) { getString(R.string.viewmodel_is_null) }
         injectDependencies()
 
+        val viewModel: MainViewModel by currentScope.inject()
+        model = viewModel
         model.subscribe().observe(this@MainActivity, Observer<AppState> {
-            renderData(it, true)
+            renderData(it)
         })
     }
 
     private fun initViews() {
-        search_fab.setOnClickListener(fabClickListener)
-        search_db_fab.setOnClickListener(fabDBClickListener)
+        searchFAB.setOnClickListener(fabClickListener)
 
-        main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
-        main_activity_recyclerview.adapter = adapter
+        mainActivityRecyclerView.layoutManager = LinearLayoutManager(applicationContext)
+        mainActivityRecyclerView.adapter = adapter
     }
 
     override fun setDataToAdapter(data: List<DataModel>) {
@@ -283,8 +256,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     companion object {
         private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG = "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
         private const val HISTORY_ACTIVITY_PATH = "com.szareckii.historyscreen.view.history.HistoryActivity"
-        private const val HISTORY_ACTIVITY_FEATURE_NAME = "historyScreen"
+        private const val HISTORY_ACTIVITY_FEATURE_NAME = "historyscreen"
         private const val REQUEST_CODE = 100
-        private var isOnline = true
     }
 }

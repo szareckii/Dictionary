@@ -1,4 +1,4 @@
-package com.szareckii.dictionary.viewmodel
+package com.szareckii.core.viewmodel
 
 interface Interactor<T> {
 

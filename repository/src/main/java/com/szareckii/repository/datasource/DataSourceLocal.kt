@@ -1,6 +1,6 @@
 package com.szareckii.repository.datasource
 
-import com.szareckii.dictionary.model.data.AppState
+import com.szareckii.model.data.AppState
 import com.szareckii.repository.room.HistoryEntity
 
 // Наследуемся от DataSource и добавляем нужный метод

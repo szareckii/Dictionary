@@ -1,0 +1,93 @@
+plugins {
+    id 'com.android.dynamic-feature'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+//    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion Config.compile_sdk
+
+    defaultConfig {
+        minSdkVersion Config.min_sdk
+        targetSdkVersion Config.target_sdk
+        versionCode Releases.version_code
+        versionName Releases.version_name
+    }
+
+    compileOptions {
+        sourceCompatibility Config.java_version
+        targetCompatibility Config.java_version
+    }
+
+//    kotlinOptions {
+//        jvmTarget = "1.8"
+//    }
+}
+//
+//
+//android {
+//    compileSdkVersion Config.compile_sdk
+//
+//    defaultConfig {
+//        applicationId "com.szareckii.historyscreen"
+//        minSdkVersion 21
+//        targetSdkVersion 30
+//        versionCode 1
+//        versionName "21.0"
+//
+//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//    }
+//
+//    buildTypes {
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//        }
+//    }
+//
+//    compileOptions {
+//        sourceCompatibility Config.java_version
+//        targetCompatibility Config.java_version
+//    }
+//}
+
+
+dependencies {
+    implementation project(Modules.app)
+    implementation project(Modules.model)
+    implementation project(Modules.repository)
+    implementation project(Modules.core)
+
+    // AndroidX
+    implementation Tools.multidex
+    implementation Design.appcompat
+
+    //Design
+    implementation Design.material
+
+    //Kotlin
+    implementation Kotlin.core
+    implementation Kotlin.stdlib
+    implementation Kotlin.coroutines_core
+    implementation Kotlin.coroutines_android
+
+    //Koin for Android
+    implementation Koin.koin_android
+    implementation Koin.koin_view_model
+
+//    // Room
+//    implementation Room.runtime
+//    kapt Room.compiler
+//    implementation Room.room_ktx
+
+    //Test
+    testImplementation TestImpl.junit
+    androidTestImplementation TestImpl.runner
+    androidTestImplementation TestImpl.espresso
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+repositories {
+    mavenCentral()
+}

@@ -30,7 +30,8 @@ android {
         targetCompatibility Config.java_version
     }
 
-    dynamicFeatures = [Modules.historyScreen]
+//    dynamicFeatures = [Modules.historyScreen]
+    dynamicFeatures = [":historyscreen"]
 }
 
 dependencies {
@@ -75,10 +76,10 @@ dependencies {
     kapt Room.compiler
     implementation Room.room_ktx
 
-    //SwipeRefreshLayout
+    //Swipe Refresh Layout
     implementation SwipeRefreshLayout.swiperefreshlayout
 
-    //GooglePlay
+    //Google Play libraries
     implementation GooglePlay.googlePlay
 
     // Test
