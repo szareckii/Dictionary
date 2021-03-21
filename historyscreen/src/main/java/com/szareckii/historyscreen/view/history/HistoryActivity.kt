@@ -1,7 +1,9 @@
 package com.szareckii.historyscreen.view.history
 
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.lifecycle.Observer
 import com.szareckii.core.BaseActivity
 import com.szareckii.historyscreen.R
@@ -26,10 +28,20 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
         initViews()
     }
 
+    private fun hideUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+        } else {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+
     // Сразу запрашиваем данные из локального репозитория
     override fun onResume() {
         super.onResume()
         model.getData("", false)
+        hideUI()
     }
 
     // Вызовется из базовой Activity, когда данные будут готовы
