@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             tools:text="Transcription"/>
 
-        <com.szareckii.dictionary.utils.ui.EquilateralImageView
+        <com.szareckii.utils.ui.EquilateralImageView
             android:id="@+id/description_imageview"
             android:layout_width="match_parent"
             android:layout_marginStart="@dimen/margin_medium"

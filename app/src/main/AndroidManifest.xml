@@ -23,9 +23,6 @@
         <activity
             android:name=".view.description.DescriptionActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".view.history.HistoryActivity"
-            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

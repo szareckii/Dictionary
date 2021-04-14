@@ -5,24 +5,18 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.szareckii.core.BaseActivity
 import com.szareckii.dictionary.R
 import com.szareckii.dictionary.model.data.AppState
 import com.szareckii.dictionary.model.data.DataModel
 import com.szareckii.dictionary.utils.convertMeaningsToString
-import com.szareckii.dictionary.utils.ui.network.isOnline
-import com.szareckii.dictionary.view.base.BaseActivity
 import com.szareckii.dictionary.view.description.DescriptionActivity
-import com.szareckii.dictionary.view.history.HistoryActivity
-import com.szareckii.dictionary.view.history.HistoryViewModel
 import com.szareckii.dictionary.view.main.adapter.MainAdapter
+import com.szareckii.utils.ui.network.isOnline
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
@@ -40,8 +34,8 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                         this@MainActivity,
                         data.text!!,
                         convertMeaningsToString(data.meanings!!),
-                        data.meanings[0].imageUrl,
-                        data.meanings[0].transcription!!
+                        data.meanings!![0].imageUrl,
+                        data.meanings!![0].transcription!!
                     )
                 )
             }
@@ -141,7 +135,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_history -> {
-                startActivity(Intent(this, HistoryActivity::class.java))
+                startActivity(Intent(this, com.szareckii.historyscreen.view.history.HistoryActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
