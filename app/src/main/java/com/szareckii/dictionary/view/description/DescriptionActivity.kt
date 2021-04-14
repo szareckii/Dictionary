@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.szareckii.dictionary.R
+import com.szareckii.utils.network.OnlineLiveData
+import com.szareckii.utils.network.isOnline
 import com.szareckii.utils.ui.AlertDialogFragment
-import com.szareckii.utils.ui.network.isOnline
 import kotlinx.android.synthetic.main.activity_description.*
 
 class DescriptionActivity : AppCompatActivity() {
@@ -58,25 +60,31 @@ class DescriptionActivity : AppCompatActivity() {
     }
 
     private fun startLoadingOrShowError() {
-        if (isOnline(applicationContext)) {
-            setData()
-        } else {
-            AlertDialogFragment.newInstance(
-                getString(R.string.dialog_title_device_is_offline),
-                getString(R.string.dialog_message_device_is_offline)
-            ).show(
-                supportFragmentManager,
-                DIALOG_FRAGMENT_TAG
-            )
-            stopRefreshAnimationIfNeeded()
-        }
+        OnlineLiveData(this).observe(
+            this@DescriptionActivity,
+            Observer<Boolean> {
+                if (it) {
+                    setData()
+                } else {
+                    AlertDialogFragment.newInstance(
+                        getString(R.string.dialog_title_device_is_offline),
+                        getString(R.string.dialog_message_device_is_offline)
+                    ).show(
+                        supportFragmentManager,
+                        DIALOG_FRAGMENT_TAG
+                    )
+                    stopRefreshAnimationIfNeeded()
+                }
+            })
     }
+
     // Метод, следящий за сокрытием спиннера загрузки при обновлении страницы
     private fun stopRefreshAnimationIfNeeded() {
         if (description_screen_swipe_refresh_layout.isRefreshing) {
             description_screen_swipe_refresh_layout.isRefreshing = false
         }
     }
+
     private fun usePicassoToLoadPhoto(imageView: ImageView, imageLink: String) {
         Picasso.with(applicationContext).load("https:$imageLink")
             .placeholder(R.drawable.ic_no_photo_vector)

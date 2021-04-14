@@ -26,15 +26,6 @@
             android:layout_marginEnd="@dimen/margin_medium"
             android:layout_height="wrap_content"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/search_db_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:layout_marginStart="@dimen/margin_medium"
-            android:layout_marginBottom="@dimen/margin_medium"
-            android:src="@android:drawable/ic_input_get" />
-
     </FrameLayout>
 
     <include layout="@layout/loading_layout"/>

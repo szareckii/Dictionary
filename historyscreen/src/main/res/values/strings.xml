@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">history</string>
+    <string name="viewmodel_is_null_hist">The ViewModel should be initialised first</string>
+</resources>

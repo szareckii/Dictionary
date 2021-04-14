@@ -9,6 +9,7 @@ dependencies {
     implementation project(Modules.utils)
 
     implementation Design.appcompat
+    implementation Design.material
 
     //Kotlin
     implementation Kotlin.core

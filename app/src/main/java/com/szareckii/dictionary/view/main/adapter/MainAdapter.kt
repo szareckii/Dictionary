@@ -5,8 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.szareckii.dictionary.R
-import com.szareckii.dictionary.model.data.DataModel
 import com.szareckii.dictionary.utils.convertMeaningsToString
+import com.szareckii.model.data.dto.DataModelDto
+import com.szareckii.model.data.userdata.DataModel
 import kotlinx.android.synthetic.main.activity_main_recyclerview_item.view.*
 
 class MainAdapter(private var onListItemClickListener: OnListItemClickListener) :

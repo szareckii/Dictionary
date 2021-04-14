@@ -1,14 +1,15 @@
 package com.szareckii.dictionary.view.main
 
-import com.szareckii.dictionary.model.data.AppState
-import com.szareckii.dictionary.model.data.DataModel
+import com.szareckii.model.data.AppState
 import com.szareckii.repository.repository.Repository
 import com.szareckii.repository.repository.RepositoryLocal
-import com.szareckii.dictionary.viewmodel.Interactor
+import com.szareckii.core.viewmodel.Interactor
+import com.szareckii.dictionary.utils.mapSearchResultToResult
+import com.szareckii.model.data.dto.DataModelDto
 
 class MainInteractor(
-    private val repositoryRemote: Repository<List<DataModel>>,
-    private val repositoryLocal: RepositoryLocal<List<DataModel>>
+    private val repositoryRemote: Repository<List<DataModelDto>>,
+    private val repositoryLocal: RepositoryLocal<List<DataModelDto>>
 ) : Interactor<AppState> {
 
     override suspend fun getData(word: String, fromRemoteSource: Boolean): AppState {
@@ -17,10 +18,10 @@ class MainInteractor(
         // здесь, в соответствии с принципами чистой архитектуры: интерактор
         // обращается к репозиторию
         if (fromRemoteSource) {
-            appState = AppState.Success(repositoryRemote.getData(word))
+            appState = AppState.Success(mapSearchResultToResult(repositoryRemote.getData(word)))
             repositoryLocal.saveToDB(appState)
         } else {
-            appState = AppState.Success(repositoryLocal.getData(word))
+            appState = AppState.Success(mapSearchResultToResult(repositoryLocal.getData(word)))
         }
         return appState
     }

@@ -3,24 +3,43 @@ package com.szareckii.core
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.szareckii.dictionary.model.data.AppState
-import com.szareckii.dictionary.model.data.DataModel
-import com.szareckii.dictionary.viewmodel.BaseViewModel
-import com.szareckii.dictionary.viewmodel.Interactor
+import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
+import com.szareckii.core.viewmodel.BaseViewModel
+import com.szareckii.core.viewmodel.Interactor
+import com.szareckii.model.data.AppState
+import com.szareckii.model.data.dto.DataModelDto
+import com.szareckii.model.data.userdata.DataModel
+import com.szareckii.utils.network.OnlineLiveData
 import com.szareckii.utils.ui.AlertDialogFragment
-import com.szareckii.utils.ui.network.isOnline
 import kotlinx.android.synthetic.main.loading_layout.*
 
 abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity() {
 
     abstract val model: BaseViewModel<T>
+    protected abstract val layoutRes: Int
+    protected var isNetworkAvailable: Boolean = true
+    private var snackbar: Snackbar? = null
 
     abstract fun setDataToAdapter(data: List<DataModel>)
-
     abstract fun showWordLocalRep(data: List<DataModel>)
 
-    protected fun renderData(appState: T, isOnline: Boolean) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(layoutRes)
+        subscribeToNetworkChange()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!isNetworkAvailable && isDialogNull()) {
+            showNoInternetConnectionDialog()
+        }
+    }
+
+    protected fun renderData(appState: T) {
         when (appState) {
             is AppState.Success -> {
                 showViewWorking()
@@ -31,10 +50,7 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
                             getString(R.string.empty_server_response_on_success)
                         )
                     } else {
-                        if (isOnline)
                             setDataToAdapter(it)
-                        else
-                            showWordLocalRep(it)
                     }
                 }
             }
@@ -56,20 +72,34 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
         }
     }
 
-
-    protected var isNetworkAvailable: Boolean = false
-
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-        isNetworkAvailable = isOnline(applicationContext)
+    private fun subscribeToNetworkChange() {
+        OnlineLiveData(this).observe(
+            this@BaseActivity,
+            Observer<Boolean> {
+                isNetworkAvailable = it
+                if (!isNetworkAvailable) {
+//                    Toast.makeText(
+//                        this@BaseActivity,
+//                        R.string.dialog_message_device_is_offline,
+//                        Toast.LENGTH_LONG
+//                    ).show()
+                    toapopupSnackbarForNetwork()
+                } else {
+                    snackbar?.dismiss()
+                }
+            })
     }
 
-    override fun onResume() {
-        super.onResume()
-        isNetworkAvailable = isOnline(applicationContext)
-        if (!isNetworkAvailable && isDialogNull()) {
-            showNoInternetConnectionDialog()
-        }
+    private fun toapopupSnackbarForNetwork() {
+        snackbar = Snackbar.make(
+            findViewById(android.R.id.content),
+            R.string.dialog_message_device_is_offline,
+            Snackbar.LENGTH_INDEFINITE
+        )
+            .apply {
+                setAction("Ok") { }
+                show()
+            }
     }
 
     protected fun showNoInternetConnectionDialog() {
@@ -79,7 +109,7 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
         )
     }
 
-    protected fun showAlertDialog(title: String?, message: String?) {
+    private fun showAlertDialog(title: String?, message: String?) {
         AlertDialogFragment.newInstance(title, message).show(supportFragmentManager, DIALOG_FRAGMENT_TAG)
     }
 
