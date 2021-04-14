@@ -1,10 +1,13 @@
 package com.szareckii.dictionary.model.datasource
 
+import com.szareckii.dictionary.model.data.AppState
 import com.szareckii.dictionary.model.data.DataModel
-import io.reactivex.Observable
+import com.szareckii.dictionary.room.HistoryEntity
 
-class DataSourceLocal(private val remoteProvider: RoomDataBaseImplementation = RoomDataBaseImplementation()) :
-    DataSource<List<DataModel>> {
+// Наследуемся от DataSource и добавляем нужный метод
+interface DataSourceLocal<T> : DataSource<T> {
 
-    override fun getData(word: String): Observable<List<DataModel>> = remoteProvider.getData(word)
+    suspend fun getHistoryEntityData(appState: AppState): HistoryEntity?
+
+    suspend fun saveToDB(appState: AppState)
 }

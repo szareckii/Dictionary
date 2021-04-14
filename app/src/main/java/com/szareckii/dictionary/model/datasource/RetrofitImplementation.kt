@@ -1,5 +1,8 @@
 package com.szareckii.dictionary.model.datasource
 
+import android.provider.ContactsContract.CommonDataKinds.Identity.IDENTITY
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.szareckii.dictionary.model.data.DataModel
 import okhttp3.Interceptor
@@ -22,6 +25,7 @@ class RetrofitImplementation : DataSource<List<DataModel>> {
         return Retrofit.Builder()
             .baseUrl(BASE_URL_LOCATIONS)
             .addConverterFactory(GsonConverterFactory.create())
+//            .addConverterFactory(GsonConverterFactory.create(gson()))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .client(createOkHttpClient(interceptor))
             .build()
@@ -33,6 +37,11 @@ class RetrofitImplementation : DataSource<List<DataModel>> {
         httpClient.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         return httpClient.build()
     }
+
+    fun gson() = GsonBuilder()
+        .excludeFieldsWithoutExposeAnnotation()
+        .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+        .create()
 
     companion object {
         private const val BASE_URL_LOCATIONS = "https://dictionary.skyeng.ru/api/public/v1/"

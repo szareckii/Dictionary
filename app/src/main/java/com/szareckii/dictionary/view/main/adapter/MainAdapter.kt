@@ -52,4 +52,5 @@ class MainAdapter(private var onListItemClickListener: OnListItemClickListener) 
     interface OnListItemClickListener {
         fun onItemClick(data: DataModel)
     }
+
 }
