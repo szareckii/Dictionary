@@ -1,4 +1,4 @@
-package com.szareckii.historyscreen.view.history
+package com.szareckii.historyscreen.view.history.view
 
 import com.szareckii.dictionary.model.data.AppState
 import com.szareckii.dictionary.model.data.DataModel

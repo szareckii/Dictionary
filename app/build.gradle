@@ -29,6 +29,8 @@ android {
         sourceCompatibility Config.java_version
         targetCompatibility Config.java_version
     }
+
+    dynamicFeatures = [Modules.historyScreen]
 }
 
 dependencies {
@@ -38,7 +40,7 @@ dependencies {
     implementation project(Modules.model)
     implementation project(Modules.repository)
     implementation project(Modules.utils)
-    implementation project(Modules.historyScreen) //Feature
+//    implementation project(Modules.historyScreen) //Feature
 
     // AndroidX
     implementation Tools.multidex
@@ -76,11 +78,15 @@ dependencies {
     //SwipeRefreshLayout
     implementation SwipeRefreshLayout.swiperefreshlayout
 
+    //GooglePlay
+    implementation GooglePlay.googlePlay
+
     // Test
     testImplementation TestImpl.junit
     androidTestImplementation TestImpl.runner
     androidTestImplementation TestImpl.espresso
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
 //     Test
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 

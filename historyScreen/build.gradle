@@ -1,16 +1,38 @@
 plugins {
-    id 'com.android.library'
+    id 'com.android.dynamic-feature'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion Config.compile_sdk
+
+    defaultConfig {
+        minSdkVersion Config.min_sdk
+        targetSdkVersion Config.target_sdk
+        versionCode Releases.version_code
+        versionName Releases.version_name
+    }
+
+    compileOptions {
+        sourceCompatibility Config.java_version
+        targetCompatibility Config.java_version
+    }
+
 }
 
 dependencies {
+    implementation project(Modules.app)
     implementation project(Modules.model)
     implementation project(Modules.repository)
     implementation project(Modules.core)
 
-    //Design
+    // AndroidX
+    implementation Tools.multidex
     implementation Design.appcompat
+
+    //Design
     implementation Design.material
 
     //Kotlin
@@ -22,6 +44,11 @@ dependencies {
     //Koin for Android
     implementation Koin.koin_android
     implementation Koin.koin_view_model
+
+    // Room
+    implementation Room.runtime
+    kapt Room.compiler
+    implementation Room.room_ktx
 
     //Test
     testImplementation TestImpl.junit
