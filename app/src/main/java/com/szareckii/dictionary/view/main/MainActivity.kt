@@ -1,7 +1,9 @@
 package com.szareckii.dictionary.view.main
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -53,6 +55,14 @@ class   MainActivity : BaseActivity<AppState, MainInteractor>() {
         iniViewModel()
         initViews()
         checkForUpdates()
+    }
+
+    private fun hideUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+        } else {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
     }
 
     // Слушатель получает от адаптера необходимые данные и запускает новый экран
@@ -148,6 +158,12 @@ class   MainActivity : BaseActivity<AppState, MainInteractor>() {
                     }
                 true
             }
+
+            R.id.menu_screen_settings -> {
+                startActivityForResult(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY), 42)
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -247,9 +263,14 @@ class   MainActivity : BaseActivity<AppState, MainInteractor>() {
                         )
                     }
                 }
+        hideUI()
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.history_menu, menu)
+        // Находим нужную кнопку и меняем ей видимость в зависимости от OS
+        menu?.findItem(R.id.menu_screen_settings)?.isVisible =
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
         return super.onCreateOptionsMenu(menu)
     }
 

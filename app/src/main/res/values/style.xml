@@ -1,9 +1,16 @@
 <resources>
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+<!--    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">-->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+
+        <!-- Нижняя панель навигации станет прозрачной -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!-- Опционально: сделать StatusBar прозрачным -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
     </style>
 
     <style name="BaseTextStyle" parent="TextAppearance.MaterialComponents.Body1">

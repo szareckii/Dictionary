@@ -2,8 +2,10 @@ package com.szareckii.dictionary.view.description
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -25,6 +27,19 @@ class DescriptionActivity : AppCompatActivity() {
         // Устанавливаем слушатель обновления экрана
         description_screen_swipe_refresh_layout.setOnRefreshListener { startLoadingOrShowError() }
         setData()
+    }
+
+    private fun hideUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+        } else {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideUI()
     }
 
     // Переопределяем нажатие на стрелку Назад, чтобы возвращаться по нему
